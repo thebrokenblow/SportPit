@@ -25,6 +25,10 @@
                     </ul>
                 </div>
             </div>
+            <div class="d-flex justify-content-around" style="width: 350px">
+                <a asp-controller="PersonalCabinet" asp-action="Index" class="btn btn-success" style="color: white" role="button">Личный кабинет</a>
+                <a asp-controller="Cart" asp-action="Index" class="btn btn-success" style="color: white" role="button">Корзина</a>
+            </div>
         </nav>
     </header>
     <div class="container">
@@ -32,12 +36,6 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - SportPit - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

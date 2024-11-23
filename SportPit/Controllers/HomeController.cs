@@ -8,18 +8,20 @@ using System.Diagnostics;
 
 namespace SportPit.Controllers;
 
-public class HomeController(ApplicationContext context, IOrderRepository orderRepository) : Controller
+public class HomeController(
+    IProductRepository productRepository, 
+    IOrderRepository orderRepository) : Controller
 {
     public async Task<IActionResult> Index()
     {
-        var products = await context.Products.ToListAsync();
+        var products = await productRepository.GetAllAsync();
 
         return View(products);
     }
 
     public async Task<IActionResult> Details(int id)
     {
-        var product = await context.Products.SingleAsync(product => product.Id == id);
+        var product = await productRepository.GetByIdAsync(id);
 
         return View(product);
     }

@@ -23,6 +23,11 @@ public class OrderRepository : IOrderRepository
         }
     }
 
+    public void Clear()
+    {
+        CountProductsByProductId.Clear();
+    }
+
     public void Remove(ProductCartDto productCartDTO)
     {
         if (CountProductsByProductId.TryGetValue(productCartDTO, out int count))

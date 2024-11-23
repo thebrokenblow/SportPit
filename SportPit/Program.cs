@@ -11,6 +11,9 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseNpgsql(connection));
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 
 var app = builder.Build();
 
