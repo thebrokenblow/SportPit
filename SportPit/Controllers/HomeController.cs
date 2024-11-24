@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportPit.Data;
 using SportPit.Models;
 using SportPit.Models.Dto;
+using SportPit.Repositories;
 using SportPit.Repositories.Interfaces;
 using System.Diagnostics;
 
@@ -10,13 +11,23 @@ namespace SportPit.Controllers;
 
 public class HomeController(
     IProductRepository productRepository, 
-    IOrderRepository orderRepository) : Controller
+    IOrderRepository orderRepository,
+    ICategoryRepository categoryRepository) : Controller
 {
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string titleProduct, string selectedCategory)
     {
-        var products = await productRepository.GetAllAsync();
+        var products = await productRepository.FindProductsAsync(titleProduct, selectedCategory);
+        var titleCategories = await categoryRepository.GetTitleCategoriesAsync();
 
-        return View(products);
+        var productsViewModel = new ProductsViewModel
+        {
+            TitleProduct = titleProduct,
+            SelectedCategory = selectedCategory,
+            Categories = new(titleCategories),
+            Products = products
+        };
+
+        return View(productsViewModel);
     }
 
     public async Task<IActionResult> Details(int id)

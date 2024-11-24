@@ -1,9 +1,20 @@
-﻿@model List<Product>
+﻿@model ProductsViewModel
 
 <div class="container">
-    <h1 class="mt-3">Игры: </h1>
+    <h1 class="mt-3">Продукты: </h1>
+    <form asp-controller="Home" asp-action="Index" method="get">
+        <p>
+
+        <select asp-for="SelectedCategory" asp-items="Model.Categories">
+            <option value="">All</option>
+        </select>
+
+            <label>Название: <input type="text" asp-for="TitleProduct" /></label>
+            <input type="submit" value="Поиск" />
+        </p>
+    </form>
     <div class="row row-cols-4 gap-3 mt-4">
-        @foreach (var game in Model)
+        @foreach (var game in Model.Products)
         {
             <div class="card" style="width: 18rem;">
                 <img src="@game.Img" class="card-img-top" alt="@game.Title">
