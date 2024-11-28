@@ -52,7 +52,7 @@ public class ProductRepository(ApplicationContext context) : IProductRepository
         await context.SaveChangesAsync();
     }
 
-    public Task<List<Product>> FindProductsAsync(string titleProduct, string selectedCategory)
+    public Task<List<Product>> FindProductsAsync(string titleProduct, string selectedCategory, int countSkip, int countTake)
     {
         var products = from m in context.Products
                        select m;
@@ -69,6 +69,6 @@ public class ProductRepository(ApplicationContext context) : IProductRepository
                 .Where(product => product.Category.Title == selectedCategory);
         }
 
-        return products.ToListAsync();
+        return products.Skip(countSkip).Take(countTake).ToListAsync();
     }
 }

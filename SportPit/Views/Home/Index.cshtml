@@ -4,10 +4,15 @@
     <h1 class="mt-3">Продукты: </h1>
     <form asp-controller="Home" asp-action="Index" method="get">
         <p>
+            <select asp-for="Filtered">
+                <option value="">Все</option>
+                <option value="PriceDesc">Дешевле</option>
+                <option value="PriceAsc">Дороже</option>
+            </select>
 
-        <select asp-for="SelectedCategory" asp-items="Model.Categories">
-            <option value="">All</option>
-        </select>
+            <select asp-for="SelectedCategory" asp-items="Model.Categories">
+                <option value="">All</option>
+            </select>
 
             <label>Название: <input type="text" asp-for="TitleProduct" /></label>
             <input type="submit" value="Поиск" />
@@ -26,4 +31,24 @@
             </div>
         }
     </div>
+
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <a asp-controller="Home"
+           asp-action="Index"
+           asp-route-titleProduct="@Model.TitleProduct"
+           asp-route-selectedCategory="@Model.SelectedCategory"
+           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+           class="btn btn-dark">Назад</a>
+    }
+
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <a asp-controller="Home"
+           asp-action="Index"
+           asp-route-titleProduct="@Model.TitleProduct"
+           asp-route-selectedCategory="@Model.SelectedCategory"
+           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+           class="btn btn-dark">Вперёд</a>
+    }
 </div>
