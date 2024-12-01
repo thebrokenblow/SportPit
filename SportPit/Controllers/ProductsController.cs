@@ -1,13 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using SportPit.Models;
 using SportPit.Repositories.Interfaces;
 
 namespace SportPit.Controllers;
 
-public class ProductsController(IProductRepository productRepository) : Controller
+public class ProductsController(IProductRepository productRepository, IHttpContextAccessor httpContextAccessor) : Controller
 {
     public async Task<IActionResult> Index()
     {
+        if ((bool)!httpContextAccessor.HttpContext?.User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        if (!(bool)(httpContextAccessor.HttpContext?.User.IsInRole(UserRoles.Admin)))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
         var products = await productRepository.GetAllAsync();
 
         return View(products);

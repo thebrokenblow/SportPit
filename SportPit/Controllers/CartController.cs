@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using SportPit.Core;
+using SportPit.Models;
 using SportPit.Models.Dto;
 using SportPit.Repositories.Interfaces;
 
@@ -9,7 +12,9 @@ public class CartController(
     IOrderRepository orderRepository, 
     ICartRepository cartRepository, 
     IProductRepository productRepository,
-    IUserRepository userRepository) : Controller
+    IUserRepository userRepository,
+    IHttpContextAccessor httpContextAccessor,
+    UserManager<User> userManager) : Controller
 {
     public IActionResult Index()
     {
@@ -24,9 +29,15 @@ public class CartController(
 
     public async Task<IActionResult> CreateOrder()
     {
+        if ((bool)!httpContextAccessor.HttpContext?.User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+        var userName = httpContextAccessor.HttpContext?.User.Identity.Name;
+        var user = await userManager.FindByNameAsync(userName);
         var products = await productRepository
             .GetProductsByListIdAsync(orderRepository.CountProductsByProductId.Keys.Select(x => x.Id).ToList());
-        var user = await userRepository.GetUserByIdAsync("1");
+
         await cartRepository.AddAsync(products, user, DateOnly.FromDateTime(DateTime.Now), orderRepository.Sum);
 
         orderRepository.Clear();
